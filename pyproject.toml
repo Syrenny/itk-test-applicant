@@ -1,0 +1,20 @@
+[project]
+name = "itk-test-applicant"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.17.0",
+    "asyncpg>=0.30.0",
+    "fastapi>=0.120.1",
+    "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "pydantic-settings>=2.11.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "pyyaml>=6.0.3",
+    "sqlalchemy>=2.0.44",
+    "testcontainers>=4.13.2",
+    "uvicorn>=0.38.0",
+]
