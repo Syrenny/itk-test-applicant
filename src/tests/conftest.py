@@ -58,7 +58,6 @@ async def is_db_empty(conn: AsyncConnection) -> bool:
     return all(c == 0 for c in counts)
 
 
-# pattern: https://docs.sqlalchemy.org/en/14/orm/session_transaction.html#joining-a-session-into-an-external-transaction-such-as-for-test-suites
 @pytest_asyncio.fixture(scope="function")
 async def isolated_session() -> AsyncIterator[AsyncSession]:
     async with open_connection() as conn:
@@ -76,16 +75,22 @@ def app() -> FastAPI:
 
 
 @pytest_asyncio.fixture(scope="function")
-async def client(app: FastAPI) -> AsyncIterator[AsyncClient]:
-    """Provide httpx AsyncClient with injected RequestContext session."""
+async def db_conn() -> AsyncIterator[AsyncConnection]:
     async with open_connection() as conn:
-        async def override_ctx():
-            async with open_session(conn) as session:
-                return RequestContext(session=session)
+        yield conn
 
-        app.dependency_overrides[RequestContext] = override_ctx
 
-        async with AsyncClient(
-            transport=ASGITransport(app=app), base_url="http://test"
-        ) as ac:
-            yield ac
+@pytest_asyncio.fixture(scope="function")
+async def client(app: FastAPI, db_conn: AsyncConnection) -> AsyncIterator[AsyncClient]:
+    """Provide httpx AsyncClient with injected RequestContext session."""
+
+    async def override_ctx():
+        async with open_session(db_conn) as session:
+            yield RequestContext(session=session)
+
+    app.dependency_overrides[RequestContext] = override_ctx
+
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test"
+    ) as ac:
+        yield ac
