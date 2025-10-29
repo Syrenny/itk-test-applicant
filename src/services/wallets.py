@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.db.dao import DaoWallet
@@ -10,6 +11,12 @@ from src.services.operations import OperationService
 
 
 class WalletService:
+    @classmethod
+    async def create_wallet(cls, session: AsyncSession, balance: int = 0) -> UUID:
+        db_wallet = await DaoWallet.create_wallet(session=session, balance=balance)
+
+        return db_wallet.id
+
     @classmethod
     async def get_balance(cls, session: AsyncSession, wallet_id: UUID) -> int:
         db_wallet = await DaoWallet.get_wallet(session=session, wallet_id=wallet_id)
@@ -23,12 +30,17 @@ class WalletService:
     async def add_to_balance(
         cls, session: AsyncSession, wallet_id: UUID, amount: int
     ) -> None:
-        db_wallet = await DaoWallet.add_to_balance(
-            session=session, wallet_id=wallet_id, amount=amount
-        )
+        try:
+            db_wallet = await DaoWallet.add_to_balance(
+                session=session, wallet_id=wallet_id, amount=amount
+            )
+        except IntegrityError as e:
+            raise WalletNotFoundError(wallet_id=wallet_id) from e
 
         if db_wallet is None:
             raise WalletNotFoundError(wallet_id=wallet_id)
+
+        return db_wallet.balance
 
     @classmethod
     async def process_operation(

@@ -18,3 +18,7 @@ dependencies = [
     "testcontainers>=4.13.2",
     "uvicorn>=0.38.0",
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"

@@ -27,7 +27,7 @@ class DBOperation(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
 
-    type: Mapped[OperationType] = mapped_column(
+    op_type: Mapped[OperationType] = mapped_column(
         Enum(OperationType, name="operation_type_enum", native_enum=False),
         nullable=False,
     )

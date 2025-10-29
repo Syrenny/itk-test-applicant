@@ -8,13 +8,16 @@ from src.db.models import DBOperation, OperationType
 class Operation(BaseModel):
     id: UUID
     wallet_id: UUID
-    type: OperationType
+    op_type: OperationType
     amount: int
 
     @classmethod
     def from_db(cls, db_op: DBOperation) -> "Operation":
         return cls(
-            id=db_op.id, wallet_id=db_op.wallet_id, type=db_op.type, amount=db_op.amount
+            id=db_op.id,
+            wallet_id=db_op.wallet_id,
+            op_type=db_op.op_type,
+            amount=db_op.amount,
         )
 
 

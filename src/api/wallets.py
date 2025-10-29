@@ -11,6 +11,18 @@ router = APIRouter()
 
 
 @router.post(
+    "/wallets",
+    tags=["Wallets"],
+    summary="Create new wallet",
+)
+async def create_wallet(
+    balance: int = 0,
+    ctx: RequestContext = Depends(),
+) -> UUID:
+    return await WalletService.create_wallet(session=ctx.session, balance=balance)
+
+
+@router.post(
     "/wallets/{wallet_id}/operation",
     tags=["Wallets"],
     summary="Add new operation to wallet",

@@ -28,7 +28,7 @@ def upgrade() -> None:
     )
     op.create_table('operations',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('type', sa.Enum('deposit', 'withdraw', name='operation_type_enum', native_enum=False), nullable=False),
+    sa.Column('op_type', sa.Enum('deposit', 'withdraw', name='operation_type_enum', native_enum=False), nullable=False),
     sa.Column('amount', sa.Integer(), nullable=False),
     sa.Column('wallet_id', sa.UUID(), nullable=False),
     sa.ForeignKeyConstraint(['wallet_id'], ['wallets.id'], ),

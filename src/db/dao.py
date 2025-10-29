@@ -13,16 +13,29 @@ class DaoOperation:
     @classmethod
     @transactional
     async def add_operation(
-        cls, session: AsyncSession, wallet_id: UUID, type: OperationType, amount: int
+        cls, session: AsyncSession, wallet_id: UUID, op_type: OperationType, amount: int
     ) -> DBOperation:
         db_op = DBOperation(
-            type=type,
+            op_type=op_type,
             amount=amount,
             wallet_id=wallet_id,
         )
-        await session.add(db_op)
+        session.add(db_op)
 
         return db_op
+
+    @classmethod
+    @transactional
+    async def get_operation(
+        cls,
+        session: AsyncSession,
+        op_id: UUID,
+    ) -> DBOperation | None:
+        stmt = select(DBOperation).filter(DBOperation.id == op_id)
+
+        result = await session.execute(stmt)
+
+        return result.scalars().first()
 
 
 class DaoWallet:
