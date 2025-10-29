@@ -2,7 +2,7 @@ services:
     api-gateway:
         build:
             context: ..
-            dockerfile: ../docker/Dockerfile
+            dockerfile: ./docker/Dockerfile
             network: host
         networks: [app-net]
         volumes:

@@ -1,6 +1,6 @@
 PROJECT ?= itk-test-applicant
 COMPOSE := docker compose -p $(PROJECT)
-FILES := -f docker/compose.yml
+FILES := -f docker/compose.yml -f docker/compose.infra.yml
 FILES_INFRA := -f docker/compose.infra.yml
 
 up:
