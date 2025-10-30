@@ -4,7 +4,7 @@
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
 [![Coverage](https://img.shields.io/badge/coverage-93%25-green)]()
 
-> Simple wallet service for creating wallet operations (deposit/withdraw) and querying balances via REST API.
+> Simple service for creating wallet operations (deposit/withdraw) and querying balances via REST API. Test task for itk-academy
 
 ### Features
 
@@ -27,7 +27,7 @@
 
 | Common Targets             | Purpose                              |
 | -------------------------- | ------------------------------------ |
-| `make up`                  | Build & start **PostgreSQL + app **  |
+| `make up`                  | Build & start **PostgreSQL + app**  |
 | `make down`                | Stop services & remove orphans       |
 | `make ps`                  | List services in the full stack      |
 | `make logs service=<name>` | Tail logs for the services           |
@@ -36,23 +36,38 @@
 | `make postgres-clean`      | **Remove** Postgres data volume      |
 
 -   **Production-like (full stack: PostgreSQL + app)**
+
     ```bash
-    make up                                     # build & start everything in detached mode
-    make down                                   # stop and remove stack (keeps volumes)
-    make ps                                     # show running containers
-    make logs service=api-gateway               # tail logs for a service
+    # Build & start everything in detached mode
+    make up
+
+    # Show running containers
+    make ps
+
+    # Tail logs for a specific service
+    make logs service=api-gateway
+
+    # Stop and remove stack (keeps volumes)
+    make down
     ```
 
 *   **Development (infra only), run API/Web locally**
 
     ```bash
-    make up-infra                               # start only PostgreSQL
+    # Start only PostgreSQL
+    make up-infra
+
+    # List infra services
     make ps-infra
-    make logs-infra service=postgres            # tail a single infra service
+
+    # Tail logs for a single infra service
+    make logs-infra service=postgres
+
+    # Stop infra-only stack
     make down-infra
     ```
 
-    > After `make up-infra`, run the **API** locally in dev mode (hot reload):
+    > After starting infra, run the API locally in dev mode (with hot reload):
     >
     > ```bash
     > uv run -m src.main
