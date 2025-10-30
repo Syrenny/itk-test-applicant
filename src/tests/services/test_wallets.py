@@ -75,7 +75,7 @@ async def test_process_operation_deposit_and_withdraw(isolated_session: AsyncSes
         session=isolated_session, wallet_id=wallet.id
     )
     assert db_wallet.balance == 120
-    
+
     await isolated_session.refresh(db_wallet)
 
     # Ensure operation is recorded
