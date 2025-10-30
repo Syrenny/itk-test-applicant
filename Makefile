@@ -32,7 +32,22 @@ logs-infra:
 
 # --- Database cleanup ---
 postgres-clean:
-	@echo "Removing Postgres data volume..."
+	@echo "Removing Postgres data volume $(PROJECT)_postgres-data ..."
 	docker volume rm $(PROJECT)_postgres-data || true
 
-.PHONY: up down ps logs up-infra down-infra ps-infra logs-infra postgres-clean
+.PHONY: help up down ps logs up-infra down-infra ps-infra logs-infra postgres-clean
+
+
+help:
+	@echo "Makefile targets:"
+	@echo "  make up             # start app + infra (use SERVICE=<name> to limit logs)"
+	@echo "  make down           # stop app + infra"
+	@echo "  make ps             # docker compose ps (app + infra)"
+	@echo "  make logs           # follow logs (app + infra) (SERVICE=...)"
+	@echo "  make up-infra       # start infra only"
+	@echo "  make down-infra     # stop infra only"
+	@echo "  make ps-infra       # docker compose ps for infra"
+	@echo "  make logs-infra     # follow infra logs (SERVICE=...)"
+	@echo "  make postgres-clean # remove postgres data volume"
+	@echo ""
+	@echo "Environment overrides: PROJECT, ENV_FILE, DOCKER_COMPOSE, SERVICE"

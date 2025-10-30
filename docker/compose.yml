@@ -3,8 +3,9 @@ services:
         build:
             context: ..
             dockerfile: ./docker/Dockerfile
-            network: host
         networks: [app-net]
+        ports:
+            - '8000:80'
         volumes:
             - /etc/localtime:/etc/localtime:ro
         healthcheck:
@@ -13,11 +14,13 @@ services:
             timeout: 5s
             retries: 5
             start_period: 10s
+
         environment:
             APP_ENV: prod
             POSTGRES_DB: ${POSTGRES_DB?required}
             POSTGRES_USER: ${POSTGRES_USER?required}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD?required}
-        restart: always
+        restart: unless-stopped
         depends_on:
-            postgres: { condition: service_healthy }
+            postgres:
+                condition: service_healthy
